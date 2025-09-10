@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Login & Register</title>
+  <style>
+    body {
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: 320px;
+      margin: 80px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #00796B;
+      color: white;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #004D40;
+    }
+
+    p {
+      text-align: center;
+      font-size: 14px;
+    }
+
+    a {
+      color: #00796B;
+      text-decoration: none;
+    }
+
+    .error { color: red; }
+    .success { color: green; }
+  </style>
+</head>
+<body>
+
+  <!-- Login Form -->
+  <div class="container" id="loginBox">
+    <h2>เข้าสู่ระบบ</h2>
+    <form id="loginForm">
+      <input type="email" id="loginEmail" placeholder="อีเมล" required>
+      <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
+      <button type="submit">Login</button>
+      <p id="loginMessage"></p>
+    </form>
+    <p>ยังไม่มีบัญชี? <a href="#" onclick="showRegister()">สมัครสมาชิก</a></p>
+  </div>
+
+  <!-- Register Form -->
+<div class="container" id="registerBox" style="display:none;">
+  <h2>สมัครสมาชิก</h2>
+  <form id="registerForm">
+    <input type="text" id="regName" placeholder="ชื่อผู้ใช้" required>
+    <input type="email" id="regEmail" placeholder="อีเมล" required>
+    <input type="password" id="regPassword" placeholder="รหัสผ่าน" required>
+    <input type="password" id="regConfirmPassword" placeholder="ยืนยันรหัสผ่าน" required>
+    <button type="submit">Register</button>
+    <p id="registerMessage"></p>
+  </form>
+  <p>มีบัญชีแล้ว? <a href="#" onclick="showLogin()">เข้าสู่ระบบ</a></p>
+</div>
+
+
+
+  <script>
+    // สลับหน้า Login <-> Register
+    function showRegister() {
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("registerBox").style.display = "block";
+    }
+
+    function showLogin() {
+      document.getElementById("registerBox").style.display = "none";
+      document.getElementById("loginBox").style.display = "block";
+    }
+
+    // ตัวอย่างการสมัคร (เก็บข้อมูลใน localStorage)
+    document.getElementById("registerForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const name = document.getElementById("regName").value;
+      const email = document.getElementById("regEmail").value;
+      const password = document.getElementById("regPassword").value;
+
+      localStorage.setItem("userEmail", email);
+      localStorage.setItem("userPassword", password);
+
+      document.getElementById("registerMessage").textContent = "สมัครสมาชิกสำเร็จ!";
+      document.getElementById("registerMessage").className = "success";
+    });
+
+    // ตัวอย่างการล็อกอิน (ตรวจข้อมูลจาก localStorage)
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      const message = document.getElementById("loginMessage");
+
+      const savedEmail = localStorage.getItem("userEmail");
+      const savedPassword = localStorage.getItem("userPassword");
+
+      if (email === savedEmail && password === savedPassword) {
+        message.textContent = "เข้าสู่ระบบสำเร็จ!";
+        message.className = "success";
+        // ไปหน้าหลัก เช่น window.location.href = "dashboard.html";
+      } else {
+        message.textContent = "อีเมลหรือรหัสผ่านไม่ถูกต้อง!";
+        message.className = "error";
+      }
+    });
+    // ตัวอย่างการสมัคร (เก็บข้อมูลใน localStorage)
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const name = document.getElementById("regName").value;
+  const email = document.getElementById("regEmail").value;
+  const password = document.getElementById("regPassword").value;
+  const confirmPassword = document.getElementById("regConfirmPassword").value;
+  const msg = document.getElementById("registerMessage");
+
+  // ✅ เช็ครหัสผ่าน >= 6 ตัวอักษร
+  if (password.length < 6) {
+    msg.textContent = "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
+    msg.className = "error";
+    return;
+  }
+
+  // ✅ เช็ครหัสผ่านตรงกัน
+  if (password !== confirmPassword) {
+    msg.textContent = "รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน";
+    msg.className = "error";
+    return;
+  }
+
+  // ✅ ถ้าผ่านทุกเงื่อนไข -> เก็บข้อมูล
+  localStorage.setItem("userEmail", email);
+  localStorage.setItem("userPassword", password);
+
+  msg.textContent = "สมัครสมาชิกสำเร็จ!";
+  msg.className = "success";
+});
+
+  </script>
+
+</body>
+</html>
