@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile</title>
+</head>
+<body>
+  <script>
+    // ถ้ายังไม่ได้ login
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      // เก็บว่าผู้ใช้พยายามเข้ามาหน้านี้
+      localStorage.setItem("redirectPage", "profile.html");
+      // แล้วส่งไปหน้า login
+      window.location.href = "ล็อคอิน.html";
+    }
+  </script>
+
+  <h2>Welcome to Profile Page 🎉</h2>
+  <p>This page is visible only after login.</p>
+</body>
+</html>

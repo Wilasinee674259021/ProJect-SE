@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+</head>
+<body>
+<h1>หน้าผู้ดูแลระบบ</h1>
+<p>เฉพาะแอดมินเท่านั้น</p>
+
+<div class="admin-section">
+  <h2>จัดการข้อมูลผู้ใช้</h2>
+  <form id="addUserForm">
+    <input type="email" id="newUserEmail" placeholder="อีเมลผู้ใช้" required>
+    <input type="password" id="newUserPassword" placeholder="รหัสผ่าน" required>
+    <button type="submit">เพิ่มผู้ใช้</button>
+  </form>
+  <ul id="userList"></ul>
+</div>
+
+<script>
+// ฟังก์ชันแสดงรายการผู้ใช้
+function renderUserList() {
+  const userList = document.getElementById("userList");
+  userList.innerHTML = "";
+  let users = JSON.parse(localStorage.getItem("users") || "[]");
+  users.forEach((user, idx) => {
+    const li = document.createElement("li");
+    li.textContent = user.email;
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "ลบ";
+    delBtn.style.marginLeft = "12px";
+    delBtn.onclick = function() {
+      users.splice(idx, 1);
+      localStorage.setItem("users", JSON.stringify(users));
+      renderUserList();
+    };
+    li.appendChild(delBtn);
+    userList.appendChild(li);
+  });
+}
+
+// เพิ่มผู้ใช้ใหม่
+document.getElementById("addUserForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const email = document.getElementById("newUserEmail").value;
+  const password = document.getElementById("newUserPassword").value;
+  let users = JSON.parse(localStorage.getItem("users") || "[]");
+  if (users.some(u => u.email === email)) {
+    alert("อีเมลนี้มีอยู่แล้ว!");
+
+// ถ้าไม่ใช่ admin ให้กลับไปหน้า login
+if(isLoggedIn !== "true" || isAdmin !== "true"){
+    window.location.href = "login.html";
+<h1>ยินดีต้อนรับผู้ใช้</h1>
+<p>คุณสามารถเพิ่ม/ลบข้อมูลผู้ใช้ได้ที่นี่</p>
+}
+
+if(localStorage.getItem("isAdmin") !== "true") {
+    alert("คุณไม่มีสิทธิ์เข้าหน้านี้!");
+    window.location.href = "index.html"; // กลับไปหน้าแรก
+}
+
+</script>
+
+<h1>ยินดีต้อนรับ Admin</h1>
+<p>นี่คือหน้าแอดมิน เห็นเฉพาะแอดมินเท่านั้น</p>
+
+
+</body>
+</html>

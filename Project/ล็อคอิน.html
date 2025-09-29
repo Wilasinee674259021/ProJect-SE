@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    body {
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: 320px;
+      margin: 80px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    h2 { text-align: center; margin-bottom: 20px; }
+    input, button {
+      width: 100%; padding: 12px; margin-bottom: 15px;
+      border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;
+    }
+    button {
+      background-color: #0B94E9; color: white; font-size: 16px;
+      border: none; cursor: pointer;
+    }
+    button:hover { background-color: #0B94E9; }
+    p { text-align: center; font-size: 14px; }
+    a { color: #0B94E9; text-decoration: none; }
+    .error { color: red; }
+    .success { color: green; }
+  </style>
+</head>
+<body>
+  <!-- Login Form -->
+  <div class="container">
+    <h2>เข้าสู่ระบบ</h2>
+    <form id="loginForm">
+  <input type="email" id="loginEmail" placeholder="อีเมล" required>
+  <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
+  <button type="submit" id="loginBtn">เข้าสู่ระบบ</button>
+  <p id="loginMessage"></p>
+    </form>
+    <p>ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิก</a></p>
+  </div>
+
+  <script>
+    // ล็อกอินตรวจจาก localStorage.users
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      const message = document.getElementById("loginMessage");
+      const loginBtn = document.getElementById("loginBtn");
+
+      let users = JSON.parse(localStorage.getItem("users") || "[]");
+  const foundUser = users.find(u => u.email === email && u.password === password);
+
+      if (foundUser) {
+  localStorage.setItem("isLoggedIn", "true");
+  localStorage.setItem("currentUser", foundUser.name);
+  message.textContent = "เข้าสู่ระบบสำเร็จ!";
+  message.className = "success";
+  loginBtn.textContent = foundUser.name;
+  loginBtn.disabled = true;
+
+        // ตรวจ admin หลังจากล็อกอินสำเร็จ
+        setTimeout(() => {
+          if (email === "admin@example.com") {
+            localStorage.setItem("isAdmin", "true");
+            window.location.href = "admin.html";
+          } else {
+            localStorage.setItem("isAdmin", "false");
+            window.location.href = "index.html";
+          }
+        }, 1000);
+      } else {
+        message.textContent = "อีเมลหรือรหัสผ่านไม่ถูกต้อง!";
+        message.className = "error";
+      }
+    });
+
+
+  </script>
+</body>
+</html>
